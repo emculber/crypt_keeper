@@ -1,0 +1,58 @@
+<?php
+
+namespace EncryptBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * EncryptFiles
+ *
+ * @ORM\Table(name="encrypt_files", indexes={@ORM\Index(name="IDX_33F92805A76ED395", columns={"user_id"})})
+ * @ORM\Entity
+ */
+class EncryptFiles
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="encrypt_files_id_seq", allocationSize=1, initialValue=1)
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="file", type="string", length=255, nullable=true)
+     */
+    private $file;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="file_extension", type="string", length=10, nullable=true)
+     */
+    private $fileExtension;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="encrypted_file_name", type="string", length=255, nullable=true)
+     */
+    private $encryptedFileName;
+
+    /**
+     * @var \FosUser
+     *
+     * @ORM\ManyToOne(targetEntity="FosUser")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * })
+     */
+    private $user;
+
+
+}
+

@@ -6,3 +6,10 @@ portfolio:
     type:     annotation
     prefix:   /
 
+root:
+    path: /
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: encrypted_files
+        permanent: true
+

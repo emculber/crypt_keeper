@@ -1,5 +1,35 @@
 {% extends 'EncryptBundle::layout.html.twig' %}
 {% block body %}
-  <div class="container-fluid">
+  <style>
+    .encrypt{
+      max-width:330px;
+      margin: 0 auto;
+    }
+    .form-heading {
+      text-align: center;
+    }
+  </style>
+  <div class="container-fluid encrypt">
+    <h1 class="form-heading">{{ title }}</h1>
+    {#
+    <form class="encrypt" action="{{ path('encrypt') }}" method="POST">
+      <div class="form-group">
+        {{ form_widget(form.file) }}
+        {{ form_errors(form.file) }}
+
+      {{ form_widget(form.sumbit, { 'attr': {'class': 'btn btn-lg btn-primary btn-block', 'value':'Upload File'} }) }}
+        {{ form_widget(form.save) }}
+       {{ form_errors(form.save) }}
+
+        {{ form_rest(form) }}
+      </div>
+      <div>
+        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">
+      </div>
+    </form>
+    #}
+    {{ form_start(form) }}
+    {{ form_row(form.file) }}
+    {{ form_end(form) }}
   </div>
 {% endblock body %}

@@ -1,0 +1,94 @@
+{% extends 'EncryptBundle::layout.html.twig' %}
+{% block body %}
+    <div class="container-fluid container">
+        <h1>File Uploaded</h1>
+        <div class="list-group">
+            {% for file in encrypted_files %}
+                <button type="button" class="list-group-item {{ file.id }}" data-title="Edit" data-toggle="modal" data-target="#edit" onclick="setUpdateValues('{{ file.file }}', '{{ file.id }}')">
+                    <span class="badge">{{ file.fileExtension }}</span>
+                    {{ file.file }}
+                </button>
+            {% endfor %}
+        </div>
+
+        <a href="{{ path("encrypt") }}" class="btn btn-sm btn-primary nav-button" style="width: 50%; margin: auto; display: block;">Update New File</a>
+        <br>
+        <a href="{{ path("encrypt_download") }}" class="btn btn-sm btn-primary nav-button" style="width: 50%; margin: auto; display: block;">Encrypt File</a>
+        <br>
+        <a href="{{ path("decrypt_download") }}" class="btn btn-sm btn-primary nav-button" style="width: 50%; margin: auto; display: block;;">Decrypt File</a>
+    </div>
+
+
+    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                    <h4 class="modal-title custom_align" id="Heading">Edit Account History</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input class="form-control update_date" type="text" placeholder="Enter Date">
+                        <input type="hidden" class="file_id">
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <button type="button" class="btn btn-warning btn-lg button_update" data-dismiss="modal" style="width: 100%;">Update</button>
+                        </div>
+                        <div class="col-xs-6">
+                            <button type="button" class="btn btn-danger btn-lg button_delete" data-dismiss="modal" style="width: 100%;">Delete</button>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-12 Download_button">
+                            <button type="button" class="btn btn-info btn-lg button_download" data-dismiss="modal" style="width: 100%;">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <script>
+        function setUpdateValues(date, id) {
+            $(".update_date").val(date);
+            $(".file_id").val(id);
+            var url = '{{ path("download_files", {'id': 'downloadid'}) }}';
+            url = url.replace("downloadid", id);
+            $(".Download_button").html('<a href="' + url + '" class="btn btn-sm btn-primary nav-button" style="width: 50%; margin: auto; display: block;;">Download</a>');
+        }
+        $(".button_delete").click(function () {
+            ajaxCall('delete', $(".update_date").val(), $(".file_id").val());
+        });
+        $(".button_update").click(function () {
+            ajaxCall('update', $(".update_date").val(), $(".file_id").val());
+        });
+        $(".button_download").click(function () {
+            ajaxCall('download', $(".update_date").val(), $(".file_id").val());
+        });
+
+        function ajaxCall(action, name, id) {
+            $.ajax({
+                type: "POST",
+                url: "{{ path('encrypted_files_ajax') }}",
+                data: {
+                    action: action,
+                    name: name,
+                    id: id
+                },
+                dataType: 'json',
+                success: function (json) {
+                    window.location.reload();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log('Error : ' + errorThrown);
+                }
+            });
+        }
+    </script>
+{% endblock body %}
